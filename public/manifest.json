@@ -1,0 +1,9 @@
+{
+    "name": "Fetly",
+    "short_name": "Fetly",
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#b677d4",
+    "background_color": "#121212",
+    "description": "Keep up to date with the community with images"
+}
