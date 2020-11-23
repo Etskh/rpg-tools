@@ -81,7 +81,7 @@ function getLineOfStats(text) {
         const stat = statText.trim().split(" ");
         return {
             ...acc,
-            [stat[0].toLowerCase()]: parseInt(stat[1]),
+            [stat[0].toLowerCase()]: (parseInt(stat[1]) + 5) * 2,
         };
     }, {});
 }
@@ -240,19 +240,19 @@ function getCreatureData() {
             "Male",
         ],
     }, {
-    //     name: 'Zig',
-    //     template: 'Skeleton',
-    //     type: 'Gnoll Hunter',
-    //     flags: [
-    //         'Male',
-    //     ]
-    // }, {
-    //     name: 'Zag',
-    //     type: 'Gnoll Hunter',
-    //     flags: [
-    //         'Male',
-    //     ]
-    // }, {
+        name: "Zig",
+        template: "Skeleton",
+        type: "Gnoll Hunter",
+        flags: [
+            "Male",
+        ],
+    }, {
+        name: "Zag",
+        type: "Gnoll Hunter",
+        flags: [
+            "Male",
+        ],
+    }, {
         name: "Elite Cacodaemon",
         type: "Cacodaemon",
         template: "Elite Adjustment",
@@ -317,17 +317,18 @@ export function getCharacters() {
             flags: creature.flags,
             stats: {
                 level: creature.level,
-                scores: creature.scores,
+                ...(creature.scores),
                 ac: creature.ac,
                 hp: creature.hp,
                 ...(creature.saves),
             },
         })).concat([{
             name: "Benedict",
-            isGoodGuy: true,
             flags: [
+                "PC",
                 "Male",
                 "Human",
+                "Champion",
             ],
             stats: {
                 level: 5,
@@ -339,10 +340,12 @@ export function getCharacters() {
                 hp: 33,
             },
         }, {
-            name: 'Rael',
-            isGoodGuy: true,
+            name: "Rael",
             flags: [
+                "PC",
+                "Androgynous",
                 "Elf",
+                "Cleric",
             ],
             stats: {
                 level: 5,
@@ -351,7 +354,55 @@ export function getCharacters() {
                 ref: 7,
                 will: 10,
                 hp: 20,
-            }
+            },
+        }, {
+            name: "Meatshield",
+            flags: [
+                "PC",
+                "Male",
+                "Goblin",
+                "Fighter",
+            ],
+            stats: {
+                level: 5,
+                ac: 23,
+                fort: 10,
+                ref: 5,
+                will: 3,
+                hp: 40,
+            },
+        }, {
+            name: "Aurora",
+            flags: [
+                "PC",
+                "Female",
+                "Elf",
+                "Wizard",
+            ],
+            stats: {
+                level: 5,
+                ac: 15,
+                fort: 6,
+                ref: 8,
+                will: 12,
+                hp: 22,
+            },
+        }, {
+            name: "Raspberry",
+            flags: [
+                "PC",
+                "Female",
+                "Gnome",
+                "Witch",
+            ],
+            stats: {
+                level: 5,
+                ac: 18,
+                fort: 7,
+                ref: 9,
+                will: 12,
+                hp: 18,
+            },
         }]);
     });
 }

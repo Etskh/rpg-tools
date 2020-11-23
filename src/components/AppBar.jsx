@@ -1,57 +1,27 @@
 import React from "react";
-import { ThemeProvider } from "@material-ui/core/styles";
-import DarkTheme from "../contexts/ThemeContext";
-import { Grid } from "@material-ui/core";
+import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
-import PersonSharpIcon from "@material-ui/icons/PersonSharp";
-
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
-
-import { getCharacters } from "../lib/character";
-
-// TODO: pull into module
-import InitiativeList from "./InitiativeList.jsx";
-import CombatCard from "./CombatCard.jsx";
-
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-    },
     menuButton: {
         marginRight: theme.spacing(2),
     },
     title: {
         flexGrow: 1,
-    },
-    modal: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    paper: {
-        backgroundColor: theme.palette.background.paper,
-        border: "2px solid #000",
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
     },
 }));
 
@@ -63,9 +33,14 @@ export default function ApplicationAppBar({
 }) {
     const classes = useStyles();
     const [isCharacterModalOpen, setIsCharacterModalOpen] = React.useState(false);
+    const [isBulkAdd, setBulkAdd] = React.useState(false);
 
     function handleAddCharacter(character) {
-        setIsCharacterModalOpen(false);
+        // If bulk add is off, then close the panel
+        if(!isBulkAdd) {
+            setIsCharacterModalOpen(false);
+        }
+        
         const addedCharacter = characters.find(c => c.id === character.id);
         onAddCharacter(addedCharacter);
     }
@@ -74,15 +49,15 @@ export default function ApplicationAppBar({
 
     React.useEffect(() => {
         const characterList = characters.map(character => ({
-                id: character.id,
-                name: character.name,
-                level: character.stats.level,
-                isAdded: !!(scenario.characters.find(c => c.id === character.id)),
+            id: character.id,
+            name: character.name,
+            level: character.stats.level,
+            isAdded: !!(scenario.characters.find(c => c.id === character.id)),
         }));
         // Sort alphabetically
         characterList.sort((a, b) => {
-            return b.name - a.name
-        })
+            return b.name - a.name;
+        });
         // Then sortby if it's already in the scenario
         characterList.sort((a) => {
             return a.isAdded ? 1 : -1;
@@ -115,6 +90,18 @@ export default function ApplicationAppBar({
                     <Container>
                         <h2 id="transition-modal-title">Add NPC to scenario</h2>
                         {/* <p>Search will go here</p> */}
+                        <FormControlLabel
+                            control={(
+                                <Switch
+                                    checked={isBulkAdd}
+                                    onChange={(ev) => {
+                                        setBulkAdd(ev.target.checked);
+                                    }}
+                                    name="Bulk Add"
+                                />
+                            )}
+                            label="Bulk add"
+                        />
                         <List>
                             {addableCharacters.map(character => (
                                 <ListItem
@@ -125,7 +112,7 @@ export default function ApplicationAppBar({
                                 >
                                     <ListItemText
                                         primary={character.name}
-                                        secondary={character.isAdded ? 'Already added' : (`Level ${character.level}`)}
+                                        secondary={character.isAdded ? "Already added" : (`Level ${character.level}`)}
                                     />
                                 </ListItem>
                             ))}
@@ -136,3 +123,22 @@ export default function ApplicationAppBar({
         </AppBar>
     );
 }
+
+ApplicationAppBar.propTypes = {
+    scenario: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        characters: PropTypes.arrayOf(PropTypes.shape({
+            id: PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.number,
+            ]).isRequired,
+        })).isRequired,
+    }).isRequired,
+    characters: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number,
+        ]).isRequired,
+    })),
+    onAddCharacter: PropTypes.func.isRequired,
+};

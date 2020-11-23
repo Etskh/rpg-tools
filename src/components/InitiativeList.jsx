@@ -1,18 +1,13 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-
-import { getCharacters } from "../lib/character";
-
-import PersonSharpIcon from "@material-ui/icons/PersonSharp";
-
+import EmojiEmotionsSharpIcon from "@material-ui/icons/EmojiEmotionsSharp";
+import MoodBadTwoToneIcon from "@material-ui/icons/MoodBadTwoTone";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,15 +27,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function InsetDividers({
+export default function InititativeList({
     characters,
     onSelectCharacter,
-    onRemoveCharacter,
 }) {
     const classes = useStyles();
 
     const sortedByInitiative = Array.from(characters);
-    sortedByInitiative.sort((a, b) => (b.initiative || 0) - (a.initiative || 0));
+    sortedByInitiative.sort((a, b) => (b.current.initiative || 0) - (a.current.initiative || 0));
 
     const [activeCharacterId, setActiveCharacterId] = React.useState(null);
 
@@ -59,13 +53,17 @@ export default function InsetDividers({
                     >
                         <ListItemAvatar>
                             <Avatar>
-                                <PersonSharpIcon />
+                                {character.flags.find(flag => flag === "PC") ? (
+                                    <EmojiEmotionsSharpIcon />
+                                ) : (
+                                    <MoodBadTwoToneIcon />
+                                )}
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText
                             primary={character.name}
                             secondary={(
-                                character.initiative ? `Initiative ${character.initiative}` : ""
+                                character.current.initiative ? "" : "Initiative not set"
                             )}
                         />
                     </ListItem>
@@ -74,3 +72,12 @@ export default function InsetDividers({
         </List>
     );
 }
+
+InititativeList.propTypes = {
+    characters: PropTypes.arrayOf(PropTypes.shape({
+        current: PropTypes.shape({
+            initiative: PropTypes.number,
+        }).isRequired,
+    })).isRequired,
+    onSelectCharacter: PropTypes.func.isRequired,
+};
