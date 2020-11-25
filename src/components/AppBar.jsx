@@ -88,7 +88,7 @@ export default function ApplicationAppBar({
                     onOpen={() => setIsCharacterModalOpen(true)}
                 >
                     <Container>
-                        <h2 id="transition-modal-title">Add NPC to scenario</h2>
+                        <h2 id="transition-modal-title">Add Character to scenario</h2>
                         {/* <p>Search will go here</p> */}
                         <FormControlLabel
                             control={(

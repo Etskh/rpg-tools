@@ -27,6 +27,7 @@ const skills = {
     "nature": "wis",
     "occultism": "int",
     "performance": "cha",
+    "perception": "wis",
     "society": "int",
     "stealth": "dex",
     "survival": "wis",
@@ -45,10 +46,10 @@ const equipmentStats = [
     "weapon_attack",
 ];
 
-const availableFlags = [{
-    name: "equipped_armour_type",
-    values: armours,
-}];
+// const availableFlags = [{
+//     name: "equipped_armour_type",
+//     values: armours,
+// }];
 
 
 function getProf(stats, profName, score) {
@@ -73,7 +74,7 @@ function addNextGeneration(base, next, flags) {
             return typeof base[cur] !== "number" || acc;
         }, false);
     });
-    console.log("To add next:", nextWeCanAdd, wontAdd);
+    // console.log("To add next:", nextWeCanAdd, wontAdd);
     if(nextWeCanAdd.length === 0) {
         console.warn(`Couldn't add the rest of ${JSON.stringify(next)}`);
         return base;
@@ -175,17 +176,14 @@ function getRuleset() {
             },
         })))
         // fort_dc, ref_dc, will_dc
-        // FIXME: This will run because the needs is a number, despite being 0
-        //          it's important to not set them all to zero, or have a different initial value
-        .concat(saves.map(save => ({
-            name: `${save.name}_dc`,
-            needs: [`${save.name}_check`],
-            getValue: (stats) => {
-                console.log("stats check ", stats);
-                return stats[`${save.name}_check`] + 10;
-            },
-        })))
-        // ac_dc
+        // .concat(saves.map(save => ({
+        //     name: `${save.name}_dc`,
+        //     needs: [`${save.name}_check`],
+        //     getValue: (stats) => {
+        //         return stats[`${save.name}_check`] + 10;
+        //     },
+        // })))
+        // ac_check
         .concat([{
             name: "ac_check",
             needs: [
@@ -211,51 +209,26 @@ function getRuleset() {
 
 
 
-function computeRuleset({ name, stats, flags }) {
+export function computeRuleset({
+    name,
+    type,
+    stats,
+    config,
+    flags,
+}) {
     const ruleset = getRuleset();
 
     // TODO: Check flags against availableFlags
 
     return {
         name,
+        type,
         baseStats: stats,
-        ruleset,
-        flags,
-        stats: addGenerationsToStats(stats, ruleset, flags),
+        // ruleset,
+        config,
+        flags, 
+        stats: addGenerationsToStats(stats, ruleset, config),
     };
 }
 
-function getCharacterData() {
-    return {
-        name: "Gerald",
-        stats: {
-            level: 3,
-            //
-            str: 12,
-            dex: 18,
-            con: 17,
-            wis: 6,
-            int: 14,
-            cha: 15,
-            //
-            equipped_armour_value: 2, // armour ac
-            //
-            fort_prof: 1, // 1: trained
-            //
-            athletics_prof: 2, // 2: expert
-            //
-            attack_martial_prof: 1, // 1: trained
-            //
-            armour_light_prof: 1, // 1: trained
-        },
-        flags: {
-            equipped_armour_type: "light",
-        },
-    };
-}
-
-
-
-console.log(computeRuleset(getCharacterData()));
-
-
+// governess top nude black trim 3xl

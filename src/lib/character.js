@@ -81,7 +81,8 @@ function getLineOfStats(text) {
         const stat = statText.trim().split(" ");
         return {
             ...acc,
-            [stat[0].toLowerCase()]: (parseInt(stat[1]) + 5) * 2,
+            // [stat[0].toLowerCase()]: (parseInt(stat[1]) + 5) * 2,
+            [stat[0].toLowerCase()]: parseInt(stat[1]),
         };
     }, {});
 }
@@ -245,15 +246,17 @@ function getCreatureData() {
         type: "Gnoll Hunter",
         flags: [
             "Male",
+            "Friendly",
         ],
     }, {
         name: "Zag",
         type: "Gnoll Hunter",
         flags: [
             "Male",
+            "Friendly",
         ],
     }, {
-        name: "Elite Cacodaemon",
+        name: "G'Kath",
         type: "Cacodaemon",
         template: "Elite Adjustment",
         // current: {
@@ -279,6 +282,7 @@ export function getCreatures() {
             }
 
             const template = templates.find(template => template.name === character.template) || {
+                name: "",
                 translate: () => creatureType,
             };
             const computedCreature = template.translate(creatureType);
@@ -286,8 +290,7 @@ export function getCreatures() {
             return {
                 name: character.name,
                 level: creatureType.level,
-                creatureType: creatureType.name,
-                // ...(template.translate(creatureType)),
+                type: `${creatureType.name} ${template.name}`,
                 ac: computedCreature.ac,
                 saves: computedCreature.saves,
                 hp: computedCreature.hp,
@@ -309,11 +312,10 @@ export function getCreatures() {
     });
 }
 
-export function getCharacters() {
+export function getAllCreatures() {
     return getCreatures().then(creatures => {
         return creatures.map(creature => ({
             name: creature.name,
-            isGoodGuy: false,
             flags: creature.flags,
             stats: {
                 level: creature.level,
@@ -322,87 +324,6 @@ export function getCharacters() {
                 hp: creature.hp,
                 ...(creature.saves),
             },
-        })).concat([{
-            name: "Benedict",
-            flags: [
-                "PC",
-                "Male",
-                "Human",
-                "Champion",
-            ],
-            stats: {
-                level: 5,
-                // Defenses
-                ac: 20,
-                fort: 13,
-                ref: 6,
-                will: 10,
-                hp: 33,
-            },
-        }, {
-            name: "Rael",
-            flags: [
-                "PC",
-                "Androgynous",
-                "Elf",
-                "Cleric",
-            ],
-            stats: {
-                level: 5,
-                ac: 18,
-                fort: 8,
-                ref: 7,
-                will: 10,
-                hp: 20,
-            },
-        }, {
-            name: "Meatshield",
-            flags: [
-                "PC",
-                "Male",
-                "Goblin",
-                "Fighter",
-            ],
-            stats: {
-                level: 5,
-                ac: 23,
-                fort: 10,
-                ref: 5,
-                will: 3,
-                hp: 40,
-            },
-        }, {
-            name: "Aurora",
-            flags: [
-                "PC",
-                "Female",
-                "Elf",
-                "Wizard",
-            ],
-            stats: {
-                level: 5,
-                ac: 15,
-                fort: 6,
-                ref: 8,
-                will: 12,
-                hp: 22,
-            },
-        }, {
-            name: "Raspberry",
-            flags: [
-                "PC",
-                "Female",
-                "Gnome",
-                "Witch",
-            ],
-            stats: {
-                level: 5,
-                ac: 18,
-                fort: 7,
-                ref: 9,
-                will: 12,
-                hp: 18,
-            },
-        }]);
+        }));
     });
 }

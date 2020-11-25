@@ -10,11 +10,11 @@ import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
 import Modal from "@material-ui/core/Modal";
 import SetValue from "./SetValue.jsx";
-// import Text from "./Text.jsx";
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        minWidth: 275,
+        minWidth: 350,
     },
     title: {
         fontSize: 14,
@@ -50,16 +50,16 @@ export default function CombatCard({
 
     const defenses = [{
         name: "AC",
-        value: character.current.ac,
+        value: character.current.ac_check + 10,
     }, {
         name: "Fort",
-        value: character.current.fort + 10,
+        value: character.current.fort_check + 10,
     }, {
         name: "Ref",
-        value: character.current.ref + 10,
+        value: character.current.ref_check + 10,
     }, {
         name: "Will",
-        value: character.current.will + 10,
+        value: character.current.will_check + 10,
     }];
 
     function handleSetInitiative(newInitiative, addModifiers) {
@@ -68,11 +68,10 @@ export default function CombatCard({
         // FIXME: make sure it sets the right value
         onUpdateCurrentCharacter(character, {
             initiative: newInitiative + (addModifiers ? (
-                character.current.skill_perception || 0
+                character.current.skill_perception_check
             ) : 0),
         });
     }
-
 
     return (
         <Card className={classes.root} variant="outlined">
@@ -91,6 +90,9 @@ export default function CombatCard({
                 </div>
                 <Typography variant="h5" component="h2">
                     {character.name}
+                </Typography>
+                <Typography variant="h6" component="h3">
+                    {character.type}
                 </Typography>
                 <Typography variant="body2" component="div">
                     {defenses.map((defense) => (
@@ -122,9 +124,7 @@ export default function CombatCard({
                         <SetValue
                             name="Initiative"
                             allowRandom
-                            defaultValue={character.current.initiaive}
-                            minValue={1}
-                            maxValue={40}
+                            defaultValue={character.current.initiative}
                             onSetValue={(newValue, isRandom) => {
                                 handleSetInitiative(newValue, isRandom);
                             }}
@@ -145,19 +145,18 @@ export default function CombatCard({
 CombatCard.propTypes = {
     character: PropTypes.shape({
         name: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired,
         conditions: PropTypes.arrayOf(PropTypes.shape({
             name: PropTypes.string.isRequired,
         })).isRequired,
-        current: PropTypes.shape([
-            "ac",
-            "fort",
-            "ref",
-            "will",
-            "skill_athletics",
-        ].reduce((acc, cur) => ({
-            ...acc,
-            [cur]: PropTypes.number.isRequired,
-        }, {}))).isRequired,
+        current: PropTypes.shape({
+            initiative: PropTypes.number,
+            ac_check: PropTypes.number.isRequired,
+            fort_check: PropTypes.number.isRequired,
+            ref_check: PropTypes.number.isRequired,
+            will_check: PropTypes.number.isRequired,
+            skill_perception_check: PropTypes.number.isRequired,
+        }).isRequired,
     }).isRequired,
     onRemoveCharacter: PropTypes.func.isRequired,
     onUpdateCurrentCharacter: PropTypes.func.isRequired,

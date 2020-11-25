@@ -2,7 +2,16 @@ import React from "react";
 import { ThemeProvider } from "@material-ui/core/styles";
 import DarkTheme from "../contexts/ThemeContext";
 import Grid from "@material-ui/core/Grid";
-import { getCharacters } from "../lib/character";
+import {
+    getAllCharacters,
+    addCharacterToScenario,
+    removeCharacterFromScenario,
+    loadScenario,
+    updateCharacter,
+} from "../lib/scenario";
+import {
+    getConditions,
+} from "../lib/conditions";
 import AppBar from "./AppBar.jsx";
 import InitiativeList from "./InitiativeList.jsx";
 import CombatCard from "./CombatCard.jsx";
@@ -17,6 +26,8 @@ export default function Application() {
     });
     // All characters, in the scenario or not
     const [characters, setCharacters] = React.useState([]);
+    // All conditions
+    const [conditions, setConditions] = React.useState([]);
 
     // Document effects: title and theme
     React.useEffect(() => {
@@ -26,57 +37,40 @@ export default function Application() {
 
     // Loading initial data
     React.useEffect(() => {
-        getCharacters().then(loadedCharacters => {
+        getAllCharacters().then(loadedCharacters => {
             setCharacters(loadedCharacters.map(character => ({
                 ...character,
                 id: character.name,
             })));
         });
+        
+        loadScenario().then(scenario => {
+            setScenario(scenario);
+        });
 
-        // TODO: pull scenario data from local storage
+        getConditions().then(loadedConditions => {
+            setConditions(loadedConditions);
+        });
     }, []);
 
     // When a character is added to the scenario
     function handleAddCharacter(character) {
-        // Should pull into utility so it saves in local storage
-        setScenario({
-            ...scenario,
-            characters: scenario.characters.concat([{
-                id: character.id,
-                name: character.name,
-                data: character,
-                conditions: [],
-                flags: character.flags,
-                current: {
-                    ...character.stats,
-                },
-            }]),
+        addCharacterToScenario(scenario, character).then(updatedScenario => {
+            setScenario(updatedScenario);
         });
     }
 
     // When a character is removed from the scenario
     function handleRemoveCharacter(character) {
-        setScenario({
-            ...scenario,
-            characters: scenario.characters.filter(c => c.id !== character.id),
+        removeCharacterFromScenario(scenario, character).then(updatedScenario => {
+            setScenario(updatedScenario);
         });
     }
 
     // When a character has things changed about them in the scenario
     function handleUpdateCurrentCharacter(character, current) {
-        setScenario({
-            ...scenario,
-            characters: scenario.characters.filter(c => c.id !== character.id).concat([{
-                id: character.id,
-                name: character.name,
-                data: character,
-                conditions: [],
-                flags: character.flags,
-                current: {
-                    ...character.current,
-                    ...current,
-                },
-            }]),
+        updateCharacter(scenario, character, current).then(updatedScenario => {
+            setScenario(updatedScenario);
         });
     }
 
