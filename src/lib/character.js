@@ -266,10 +266,12 @@ function getCreatureData() {
         name: "G'Kath",
         type: "Cacodaemon",
         template: "Elite Adjustment",
-        // current: {
-        //     hp: 12,
-        //     conditions: [],
-        // }
+    }, {
+        name: "Faust",
+        type: "Skeletal Giant",
+    }, {
+        name: "Fiora",
+        type: "Skeletal Giant",
     }]);
 }
 

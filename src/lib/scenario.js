@@ -22,7 +22,7 @@ function getNPCCharacters() {
                 cha: (creature.scores.cha + 5) * 2,
                 //
                 base_ac_dc: creature.ac,
-                base_hp: creature.hp,
+                hp: creature.hp,
                 //
                 fort_prof: (creature.saves.fort - creature.scores.con - creature.level) / 2,
                 ref_prof: (creature.saves.ref - creature.scores.dex - creature.level) / 2,
@@ -48,6 +48,8 @@ function getPartyCharacters() {
         type: "PC",
         stats: {
             level: 5,
+            //
+            hp: 40,
             //
             str: 18,
             dex: 10,
@@ -87,6 +89,8 @@ function getPartyCharacters() {
         stats: {
             level: 5,
             //
+            hp: 20,
+            //
             str: 11,
             dex: 14,
             con: 13,
@@ -124,6 +128,8 @@ function getPartyCharacters() {
         type: "PC",
         stats: {
             level: 5,
+            //
+            hp: 31,
             //
             str: 11,
             dex: 13,
@@ -164,6 +170,8 @@ function getPartyCharacters() {
         stats: {
             level: 5,
             //
+            hp: 38,
+            //
             str: 18,
             dex: 10,
             con: 14,
@@ -201,6 +209,8 @@ function getPartyCharacters() {
         type: "PC",
         stats: {
             level: 5,
+            //
+            hp: 21,
             //
             str: 11,
             dex: 14,
@@ -290,7 +300,8 @@ export function addCharacterToScenario(scenario, character) {
             flags: character.flags,
             current: {
                 ...character.stats,
-                max_hp: character.stats.hp,
+                max_hp: character.stats.hp || character.baseStats.hp,
+                hp: character.stats.hp || character.baseStats.hp,
             },
         }]),
     });

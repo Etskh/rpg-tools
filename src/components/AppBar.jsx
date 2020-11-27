@@ -100,11 +100,6 @@ export default function ApplicationAppBar({
                 <Typography variant="h3" className={classes.appModuleTitle} color="inherit">
                     Combat
                 </Typography>
-                {/* <TextField
-                    id="scenario-name"
-                    defaultValue={scenario.name}
-                    fullWidth
-                /> */}
                 <Typography
                     variant="h6"
                     className={classes.scenarioTitle}
@@ -156,16 +151,6 @@ export default function ApplicationAppBar({
                                     Save
                                 </Button>
                             </Grid>
-                            {/* <SetValue
-                                name="Initiative"
-                                allowRandom
-                                defaultValue={character.current.initiative}
-                                onSetValue={(newValue, isRandom) => {
-                                    if(!isNaN(newValue)) {
-                                        handleSetInitiative(newValue, isRandom);
-                                    }
-                                }}
-                            /> */}
                         </Grid>
                     </div>
                 </Modal>
