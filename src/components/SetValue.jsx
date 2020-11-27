@@ -8,8 +8,6 @@ import CasinoTwoToneIcon from "@material-ui/icons/CasinoTwoTone";
 export default function SetValue({
     name,
     defaultValue,
-    // minValue,
-    // maxValue,
     allowRandom,
     onSetValue,
 }) {

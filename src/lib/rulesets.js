@@ -63,13 +63,13 @@ export function getProf(stats, profName, score) {
         throw new Error(`Expected score to be one of ${baseStats}, but got ${score} instead`);
     }
 
-    if(typeof stats[`${profName}_prof`] !== 'number') {
+    if(typeof stats[`${profName}_prof`] !== "number") {
         throw new Error(`Expected stats to include ${profName}_prof`);
     }
-    if(typeof stats[`${score}_mod`] !== 'number') {
+    if(typeof stats[`${score}_mod`] !== "number") {
         throw new Error(`Expected stats to include ${score}_mod`);
     }
-    if(typeof stats.level !== 'number') {
+    if(typeof stats.level !== "number") {
         throw new Error("Expected stats to include level");
     }
 

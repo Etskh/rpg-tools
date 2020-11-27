@@ -10,7 +10,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
 import Modal from "@material-ui/core/Modal";
 // Icons
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+// import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 // Components
 import SetValue from "./SetValue.jsx";
 

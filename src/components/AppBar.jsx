@@ -10,7 +10,7 @@ import Modal from "@material-ui/core/Modal";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import MenuIcon from "@material-ui/icons/Menu";
+// import MenuIcon from "@material-ui/icons/Menu";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -31,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         cursor: "pointer",
         textAlign: "center",
-        '&:hover': {
-            background: 'rgba(255,255,255,0.1)',
-        }
+        "&:hover": {
+            background: "rgba(255,255,255,0.1)",
+        },
     },
     modal: {
         display: "flex",
@@ -110,7 +110,7 @@ export default function ApplicationAppBar({
                     className={classes.scenarioTitle}
                     color="inherit"
                     style={{
-                        textAlign: 'center',
+                        textAlign: "center",
                     }}
                     onClick={() => {
                         setIsScenarioModalOpen(true);
@@ -233,4 +233,5 @@ ApplicationAppBar.propTypes = {
         ]).isRequired,
     })),
     onAddCharacter: PropTypes.func.isRequired,
+    onRenameScenario: PropTypes.func.isRequired,
 };
