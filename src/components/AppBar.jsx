@@ -6,7 +6,10 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
+import Modal from "@material-ui/core/Modal";
 import IconButton from "@material-ui/core/IconButton";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
 import MenuIcon from "@material-ui/icons/Menu";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import List from "@material-ui/core/List";
@@ -21,9 +24,27 @@ const useStyles = makeStyles((theme) => ({
     menuButton: {
         marginRight: theme.spacing(2),
     },
-    title: {
+    appModuleTitle: {
+        flexGrow: 1,
+    },
+    scenarioTitle: {
         flexGrow: 1,
         cursor: "pointer",
+        textAlign: "center",
+        '&:hover': {
+            background: 'rgba(255,255,255,0.1)',
+        }
+    },
+    modal: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    paper: {
+        backgroundColor: theme.palette.background.paper,
+        border: "none",
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
     },
 }));
 
@@ -32,12 +53,14 @@ export default function ApplicationAppBar({
     scenario,
     characters,
     onAddCharacter,
+    onRenameScenario,
 }) {
     const classes = useStyles();
     const [isCharacterModalOpen, setIsCharacterModalOpen] = React.useState(false);
     const [isBulkAdd, setBulkAdd] = React.useState(false);
     const [addableCharacters, setAddableCharacters] = React.useState([]);
     const [isScenarioModalOpen, setIsScenarioModalOpen] = React.useState(false);
+    const [scenarioName, setScenarioName] = React.useState(scenario.name);
 
     function handleAddCharacter(character) {
         // If bulk add is off, then close the panel
@@ -71,10 +94,10 @@ export default function ApplicationAppBar({
     return (
         <AppBar position="static" color="default">
             <Toolbar variant="dense">
-                <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                     <MenuIcon />
-                </IconButton>
-                <Typography variant="h3" className={classes.title} color="inherit">
+                </IconButton> */}
+                <Typography variant="h3" className={classes.appModuleTitle} color="inherit">
                     Combat
                 </Typography>
                 {/* <TextField
@@ -84,14 +107,68 @@ export default function ApplicationAppBar({
                 /> */}
                 <Typography
                     variant="h6"
-                    className={classes.title}
+                    className={classes.scenarioTitle}
                     color="inherit"
+                    style={{
+                        textAlign: 'center',
+                    }}
                     onClick={() => {
-                        console.log("asdf");
+                        setIsScenarioModalOpen(true);
                     }}
                 >
                     {scenario.name}
                 </Typography>
+                <Modal
+                    open={isScenarioModalOpen}
+                    onClose={() => setIsScenarioModalOpen(false)}
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                    className={classes.modal}
+                >
+                    <div className={classes.paper}>
+                        <Grid
+                            container
+                            spacing={3}
+                            direction="column"
+                            justify="center"
+                            alignItems="center"
+                        >
+                            <Grid item xs={12}>
+                                <TextField
+                                    id="scenario-name"
+                                    label="Scenario Name"
+                                    defaultValue={scenario.name}
+                                    fullWidth
+                                    onChange={(ev) => setScenarioName(ev.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="large"
+                                    fullWidth
+                                    onClick={() => {
+                                        onRenameScenario(scenarioName);
+                                        setIsScenarioModalOpen(false);
+                                    }}
+                                >
+                                    Save
+                                </Button>
+                            </Grid>
+                            {/* <SetValue
+                                name="Initiative"
+                                allowRandom
+                                defaultValue={character.current.initiative}
+                                onSetValue={(newValue, isRandom) => {
+                                    if(!isNaN(newValue)) {
+                                        handleSetInitiative(newValue, isRandom);
+                                    }
+                                }}
+                            /> */}
+                        </Grid>
+                    </div>
+                </Modal>
                 <IconButton aria-label="display more actions" edge="end" color="inherit" onClick={() => setIsCharacterModalOpen(true)}>
                     <PersonAddIcon />
                 </IconButton>
@@ -108,6 +185,7 @@ export default function ApplicationAppBar({
                             control={(
                                 <Switch
                                     checked={isBulkAdd}
+                                    color="primary"
                                     onChange={(ev) => {
                                         setBulkAdd(ev.target.checked);
                                     }}

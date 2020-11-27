@@ -254,7 +254,6 @@ export function getAllCharacters() {
 
 
 export function loadScenario() {
-    console.log("get scenario");
     const newScenario = {
         name: "Unsaved Scenario",
         characters: [],

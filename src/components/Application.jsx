@@ -8,6 +8,7 @@ import {
     removeCharacterFromScenario,
     loadScenario,
     updateCharacter,
+    renameScenario,
 } from "../lib/scenario";
 import {
     getConditions,
@@ -76,7 +77,9 @@ export default function Application() {
 
     // When the user renames the scenario
     function handleRenameScenario(newName) {
-
+        renameScenario(scenario, newName).then(updatedScenario => {
+            setScenario(updatedScenario);
+        });
     }
 
     const selectedCharacter = scenario.characters.find(character => character.id === selectedCharacterId);

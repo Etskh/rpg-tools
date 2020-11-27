@@ -79,7 +79,7 @@ export default function CombatCard({
     return (
         <Card className={classes.root} variant="outlined">
             <CardContent>
-                <div>
+                {/* <div>
                     <Button size="small">+ Condition</Button>
                     {character.conditions.map(condition => (
                         <Chip
@@ -90,7 +90,7 @@ export default function CombatCard({
                             variant="outlined"
                         />
                     ))}
-                </div>
+                </div> */}
                 <Typography variant="h5" component="h2">
                     {character.name}
                 </Typography>
@@ -108,9 +108,9 @@ export default function CombatCard({
                         />
                     ))}
                 </Typography>
-                <Typography variant="body2" component="div">
+                {/* <Typography variant="body2" component="div">
                     <ArrowForwardIcon/>
-                </Typography>
+                </Typography> */}
             </CardContent>
             <CardActions>
                 <Button
@@ -164,8 +164,8 @@ CombatCard.propTypes = {
             ref_check: PropTypes.number.isRequired,
             will_check: PropTypes.number.isRequired,
             skill_perception_check: PropTypes.number.isRequired,
-            max_hp: PropTypes.number.isRequired,
-            hp: PropTypes.number.isRequired,
+            // max_hp: PropTypes.number.isRequired,
+            // hp: PropTypes.number.isRequired,
         }).isRequired,
     }).isRequired,
     onRemoveCharacter: PropTypes.func.isRequired,

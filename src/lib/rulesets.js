@@ -63,13 +63,13 @@ export function getProf(stats, profName, score) {
         throw new Error(`Expected score to be one of ${baseStats}, but got ${score} instead`);
     }
 
-    if(!stats[`${profName}_prof`]) {
+    if(typeof stats[`${profName}_prof`] !== 'number') {
         throw new Error(`Expected stats to include ${profName}_prof`);
     }
-    if(!stats[`${score}_mod`]) {
+    if(typeof stats[`${score}_mod`] !== 'number') {
         throw new Error(`Expected stats to include ${score}_mod`);
     }
-    if(!stats.level) {
+    if(typeof stats.level !== 'number') {
         throw new Error("Expected stats to include level");
     }
 
@@ -94,7 +94,7 @@ function addNextGeneration(base, next, flags) {
             return typeof base[cur] !== "number" || acc;
         }, false);
     });
-    // console.log("To add next:", nextWeCanAdd, wontAdd);
+
     if(nextWeCanAdd.length === 0) {
         console.warn(`Couldn't add the rest of ${JSON.stringify(next)}`);
         return base;
@@ -103,7 +103,6 @@ function addNextGeneration(base, next, flags) {
     // Return the base, plus new stuff
     const nextBase = nextWeCanAdd.reduce((acc, stat) =>({
         ...acc,
-        // FIXME: Add getValue arguments here 
         [stat.name]: stat.getValue(base, flags),
     }), base);
 
@@ -116,12 +115,6 @@ function addNextGeneration(base, next, flags) {
     return nextBase;
 }
 
-/*
-idea; follow along with a programmer and generaize the changes they make
-in their code. For example, what kind of mistake is mixing up "<" with ">"?
-
-How do we avoid that mistake?
-*/
 
 
 function addGenerationsToStats(base, stats, flags) {
@@ -130,15 +123,12 @@ function addGenerationsToStats(base, stats, flags) {
 
     const baseWithoutGen1Stats = stats.filter(stat => stat.needs.length > 0);
 
-    // TODO: check that all base1gen is in base or set them to 0
     const startingStats = stats.filter(stat => {
         return stat.needs.length === 0;
     }).reduce((acc, stat) => ({
         ...acc,
         [stat.name]: base[stat.name] || 0,
     }), base);
-
-    console.log(startingStats);
 
     // Return the recursive function result
 
