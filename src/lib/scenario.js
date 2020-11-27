@@ -254,16 +254,22 @@ export function getAllCharacters() {
 
 
 export function loadScenario() {
+    console.log("get scenario");
+    const newScenario = {
+        name: "Unsaved Scenario",
+        characters: [],
+    };
+
     const scenario = localStorage.getItem("scenario");
+    if(!scenario) {
+        return Promise.resolve(newScenario);
+    }
     try {
         return Promise.resolve(JSON.parse(scenario));
     }
     catch(err) {
         console.warn(err);
-        return Promise.resolve({
-            name: "Unsaved Scenario",
-            characters: [],
-        });
+        return Promise.resolve(newScenario);
     }
 }
 
@@ -285,6 +291,7 @@ export function addCharacterToScenario(scenario, character) {
             flags: character.flags,
             current: {
                 ...character.stats,
+                max_hp: character.stats.hp,
             },
         }]),
     });
@@ -312,5 +319,12 @@ export function updateCharacter(scenario, character, current) {
                 ...current,
             },
         }]),
+    });
+}
+
+export function renameScenario(scenario, newName) {
+    return saveScenario({
+        ...scenario,
+        name: newName,
     });
 }

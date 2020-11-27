@@ -74,6 +74,11 @@ export default function Application() {
         });
     }
 
+    // When the user renames the scenario
+    function handleRenameScenario(newName) {
+
+    }
+
     const selectedCharacter = scenario.characters.find(character => character.id === selectedCharacterId);
 
     return (
@@ -82,6 +87,7 @@ export default function Application() {
                 scenario={scenario}
                 characters={characters}
                 onAddCharacter={handleAddCharacter}
+                onRenameScenario={handleRenameScenario}
             />
             <Grid
                 container
@@ -95,11 +101,14 @@ export default function Application() {
                         setSelectedCharacterId(characterId);
                     }}
                 />
-                {selectedCharacter && <CombatCard
-                    character={selectedCharacter}
-                    onRemoveCharacter={handleRemoveCharacter}
-                    onUpdateCurrentCharacter={handleUpdateCurrentCharacter}
-                />}
+                {selectedCharacter && (
+                    <CombatCard
+                        character={selectedCharacter}
+                        onRemoveCharacter={handleRemoveCharacter}
+                        onUpdateCurrentCharacter={handleUpdateCurrentCharacter}
+                        conditions={conditions}
+                    />
+                )}
             </Grid>
         </ThemeProvider>
     );

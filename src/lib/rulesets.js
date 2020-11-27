@@ -52,7 +52,27 @@ const equipmentStats = [
 // }];
 
 
-function getProf(stats, profName, score) {
+export function getProf(stats, profName, score) {
+    if(typeof stats !== "object") {
+        throw new Error(`Expected stats to be an object, but got ${stats} instead`);
+    }
+    if(typeof profName !== "string") {
+        throw new Error(`Expected profName to be an string, but got ${profName} instead`);
+    }
+    if(!baseStats.includes(score)) {
+        throw new Error(`Expected score to be one of ${baseStats}, but got ${score} instead`);
+    }
+
+    if(!stats[`${profName}_prof`]) {
+        throw new Error(`Expected stats to include ${profName}_prof`);
+    }
+    if(!stats[`${score}_mod`]) {
+        throw new Error(`Expected stats to include ${score}_mod`);
+    }
+    if(!stats.level) {
+        throw new Error("Expected stats to include level");
+    }
+
     return stats[`${profName}_prof`] * 2 + stats.level + stats[`${score}_mod`];
 }
 
@@ -118,22 +138,26 @@ function addGenerationsToStats(base, stats, flags) {
         [stat.name]: base[stat.name] || 0,
     }), base);
 
+    console.log(startingStats);
+
     // Return the recursive function result
 
     return addNextGeneration(startingStats, baseWithoutGen1Stats, flags);
 }
 
 
-function getRuleset() {
+export function getRuleset() {
 
     // export function getRuleset() {
     return []
         .concat([{
             name: "level",
+            defaultValue: 1,
         }])
         // str, dex, con, ...
         .concat(baseStats.map(stat => ({
             name: stat,
+            defaultValue: 10,
         })))
         // str_mod, dex_mod, con_mod, ...
         .concat(baseStats.map(stat => ({
@@ -146,10 +170,12 @@ function getRuleset() {
         // fort_prof, ref_prof, will_prof
         .concat(saves.map(save => ({
             name: `${save.name}_prof`,
+            defaultValue: 0,
         })))
         // skill_athletics_prof
         .concat(Object.keys(skills).map(skill => ({
             name: `skill_${skill}_prof`,
+            defaultValue: 0,
         })))
         // skill_athletics_check, skill_acrobatics_check
         .concat(Object.keys(skills).map(skill => ({
@@ -175,14 +201,6 @@ function getRuleset() {
                 return getProf(stats, save.name, save.stat);
             },
         })))
-        // fort_dc, ref_dc, will_dc
-        // .concat(saves.map(save => ({
-        //     name: `${save.name}_dc`,
-        //     needs: [`${save.name}_check`],
-        //     getValue: (stats) => {
-        //         return stats[`${save.name}_check`] + 10;
-        //     },
-        // })))
         // ac_check
         .concat([{
             name: "ac_check",
@@ -200,6 +218,9 @@ function getRuleset() {
                 return getProf(stats, `armour_${armourType}`, "dex") + stats.equipped_armour_value;
             },
         }])
+        //
+        // Now even if they don't have needs or getValue, at least provide those fields
+        //
         .map(stat => ({
             ...stat,
             getValue: stat.getValue || function() { return 0; },
@@ -219,6 +240,14 @@ export function computeRuleset({
     const ruleset = getRuleset();
 
     // TODO: Check flags against availableFlags
+    let computedStats = {};
+    try {
+        computedStats = addGenerationsToStats(stats, ruleset, config);
+    }
+    catch(err) {
+        console.log("Cant do things right for ", name);
+        console.warn(err);
+    }
 
     return {
         name,
@@ -227,8 +256,6 @@ export function computeRuleset({
         // ruleset,
         config,
         flags, 
-        stats: addGenerationsToStats(stats, ruleset, config),
+        stats: computedStats,
     };
 }
-
-// governess top nude black trim 3xl

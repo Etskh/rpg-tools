@@ -1,4 +1,4 @@
-
+// TODO: Rename to creature* instead of character
 
 const creatureBlocks = [`
 Gnoll Hunter
@@ -76,25 +76,26 @@ Terrifying Charge Two Actions The giant Strides and makes a horns Strike with a 
 `];
 
 
-function getLineOfStats(text) {
+export function getLineOfStats(text) {
     return text.split(",").reduce((acc, statText) => {
         const stat = statText.trim().split(" ");
         return {
             ...acc,
-            // [stat[0].toLowerCase()]: (parseInt(stat[1]) + 5) * 2,
             [stat[0].toLowerCase()]: parseInt(stat[1]),
         };
     }, {});
 }
 
-function parseFlags(text) {
-    return text
-        .match(/([A-Z][a-z]+)/g);
-    // TODO: add the alignment flag
-    //.concat(text.match(/([A-Z][A-Z])^[^a-z]/g));
+export function parseFlags(text) {
+    const alignmentFlags = text
+        .match(/([A-Z])+/g).map(flag => flag.substring(0, flag.length - 1))
+        .filter(flag => flag.length > 0);
+
+    return alignmentFlags.concat(text.match(/([A-Z][a-z]+)/g));
 }
 
 
+// TODO: test
 function createTypeFromBlock(infoBlock) {
     const infoLines = infoBlock.trim().split("\n");
     return infoLines.reduce((acc, cur) => {
@@ -140,27 +141,29 @@ function createTypeFromBlock(infoBlock) {
 }
 
 
-function getTemplates() {
-
-    function applyDeltas(character, deltas) {
-        return Object.keys(deltas).reduce((acc, fieldName) => {
-            if(typeof deltas[fieldName] === "object") {
-                return {
-                    ...acc,
-                    [fieldName]: Object.keys(character[fieldName]).reduce((acc, stat) => ({
-                        ...acc,
-                        [stat]: (character[fieldName][stat] || 0) + (deltas[fieldName][stat] || 0),
-                    }), {}),
-                };
-            }
-
+// TODO: test
+function applyDeltas(character, deltas) {
+    return Object.keys(deltas).reduce((acc, fieldName) => {
+        if(typeof deltas[fieldName] === "object") {
             return {
                 ...acc,
-                [fieldName]: (character[fieldName] || 0) + (deltas[fieldName] || 0),
+                [fieldName]: Object.keys(character[fieldName]).reduce((acc, stat) => ({
+                    ...acc,
+                    [stat]: (character[fieldName][stat] || 0) + (deltas[fieldName][stat] || 0),
+                }), {}),
             };
-        }, character);
-    }
+        }
 
+        return {
+            ...acc,
+            [fieldName]: (character[fieldName] || 0) + (deltas[fieldName] || 0),
+        };
+    }, character);
+}
+
+
+// TODO: test
+function getTemplates() {
     return Promise.resolve([{
         name: "Weak Adjustment",
         translate: (character) => applyDeltas(character, {
@@ -227,11 +230,15 @@ function getTemplates() {
         }),
     }]);
 }
- 
+
+
+// TODO: test
 function getCreatureType() {
     return Promise.resolve(creatureBlocks.map(block => createTypeFromBlock(block)));
 }
 
+
+// TODO: test
 function getCreatureData() {
     return Promise.resolve([{
         name: "Hax",

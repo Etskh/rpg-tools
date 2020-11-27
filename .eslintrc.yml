@@ -1,9 +1,11 @@
 env:
   browser: true
   es2020: true
+  "jest/globals": true
 extends:
   - 'eslint:recommended'
   - 'plugin:react/recommended'
+  - 'plugin:jest/recommended'
 parserOptions:
   ecmaFeatures:
     jsx: true
@@ -12,6 +14,7 @@ parserOptions:
 plugins:
   - react
   - react-hooks
+  - jest
 settings:
   react:
     version: detect
@@ -35,3 +38,13 @@ rules:
     - error
   react-hooks/exhaustive-deps:
     - warn
+  # jest/no-disabled-tests:
+  #   - warn
+  # jest/no-focused-tests:
+  #   - error
+  # jest/no-identical-title:
+  #   - error
+  # jest/prefer-to-have-length:
+  #   - warn
+  # jest/valid-expect:
+  #   - warn

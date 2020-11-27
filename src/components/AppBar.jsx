@@ -5,6 +5,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
@@ -22,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         flexGrow: 1,
+        cursor: "pointer",
     },
 }));
 
@@ -34,6 +36,8 @@ export default function ApplicationAppBar({
     const classes = useStyles();
     const [isCharacterModalOpen, setIsCharacterModalOpen] = React.useState(false);
     const [isBulkAdd, setBulkAdd] = React.useState(false);
+    const [addableCharacters, setAddableCharacters] = React.useState([]);
+    const [isScenarioModalOpen, setIsScenarioModalOpen] = React.useState(false);
 
     function handleAddCharacter(character) {
         // If bulk add is off, then close the panel
@@ -44,8 +48,6 @@ export default function ApplicationAppBar({
         const addedCharacter = characters.find(c => c.id === character.id);
         onAddCharacter(addedCharacter);
     }
-
-    const [addableCharacters, setAddableCharacters] = React.useState([]);
 
     React.useEffect(() => {
         const characterList = characters.map(character => ({
@@ -75,7 +77,19 @@ export default function ApplicationAppBar({
                 <Typography variant="h3" className={classes.title} color="inherit">
                     Combat
                 </Typography>
-                <Typography variant="h6" className={classes.title} color="inherit">
+                {/* <TextField
+                    id="scenario-name"
+                    defaultValue={scenario.name}
+                    fullWidth
+                /> */}
+                <Typography
+                    variant="h6"
+                    className={classes.title}
+                    color="inherit"
+                    onClick={() => {
+                        console.log("asdf");
+                    }}
+                >
                     {scenario.name}
                 </Typography>
                 <IconButton aria-label="display more actions" edge="end" color="inherit" onClick={() => setIsCharacterModalOpen(true)}>

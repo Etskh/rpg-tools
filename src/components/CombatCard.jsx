@@ -9,6 +9,9 @@ import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
 import Modal from "@material-ui/core/Modal";
+// Icons
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+// Components
 import SetValue from "./SetValue.jsx";
 
 
@@ -105,6 +108,9 @@ export default function CombatCard({
                         />
                     ))}
                 </Typography>
+                <Typography variant="body2" component="div">
+                    <ArrowForwardIcon/>
+                </Typography>
             </CardContent>
             <CardActions>
                 <Button
@@ -126,7 +132,9 @@ export default function CombatCard({
                             allowRandom
                             defaultValue={character.current.initiative}
                             onSetValue={(newValue, isRandom) => {
-                                handleSetInitiative(newValue, isRandom);
+                                if(!isNaN(newValue)) {
+                                    handleSetInitiative(newValue, isRandom);
+                                }
                             }}
                         />
                     </div>
@@ -156,6 +164,8 @@ CombatCard.propTypes = {
             ref_check: PropTypes.number.isRequired,
             will_check: PropTypes.number.isRequired,
             skill_perception_check: PropTypes.number.isRequired,
+            max_hp: PropTypes.number.isRequired,
+            hp: PropTypes.number.isRequired,
         }).isRequired,
     }).isRequired,
     onRemoveCharacter: PropTypes.func.isRequired,
