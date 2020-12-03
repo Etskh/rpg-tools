@@ -18,8 +18,8 @@ Melee Single Action jaws +10 [+6/+2] (agile), Damage 1d8+2 piercing
 Ranged Single Action shortbow +10 [+5/+0] (deadly 1d10, range increment 60 feet), Damage 1d6 piercing
 Pack Attack A gnoll hunter deals 1d4 extra damage to any creature that’s within reach of at least two of the gnoll hunter’s allies.
 Rugged Travel A gnoll ignores the first square of difficult terrain it moves into each time it Steps or Strides.
-`,
-`Gnoll Cultist
+`,`
+Gnoll Cultist
 Creature 3
 CEMediumGnollHumanoid
 Source Bestiary pg. 179
@@ -94,6 +94,23 @@ export function parseFlags(text) {
     return alignmentFlags.concat(text.match(/([A-Z][a-z]+)/g));
 }
 
+export function extractLists(texts, list) {
+    return texts.reduce((acc, text) => {
+        const correctThing = list.find(t => text.trim().startsWith(t));
+        if(!correctThing) {
+            return acc;
+        }
+        return {
+            ...acc,
+            [correctThing]: text
+                .trim()
+                .substring(correctThing.length)
+                .split(",")
+                .map(t => t.trim()),
+        };
+    }, {});
+}
+
 
 // TODO: test
 function createTypeFromBlock(infoBlock) {
@@ -110,8 +127,15 @@ function createTypeFromBlock(infoBlock) {
         }
 
         if(cur.startsWith("HP")) {
+            
+            const hitpoints = cur.split(";");
+            const hp = hitpoints.shift();
+            acc.hp = parseInt(hp.split(" ")[1]);
+            acc.isHealedNegative = hp.includes("negative healing");
+            const hpTraits = extractLists(hitpoints, ["Immunities", "Weaknesses", "Resistances"]);
+            acc.hpTraits = hpTraits;
             // TODO: pull out immunities, vunerabilities, and weaknesses
-            acc.hp = parseInt(cur.split(" ")[1]);
+            // acc.hp = parseInt(cur.split(" ")[1]);
         }
 
         if(cur.startsWith("Creature")) {
@@ -269,6 +293,7 @@ function getCreatureData() {
     }, {
         name: "Faust",
         type: "Skeletal Giant",
+        template: "Elite Adjustment",
     }, {
         name: "Fiora",
         type: "Skeletal Giant",
@@ -296,6 +321,8 @@ export function getCreatures() {
             };
             const computedCreature = template.translate(creatureType);
             
+            console.log(computedCreature);
+
             return {
                 name: character.name,
                 level: creatureType.level,
@@ -303,36 +330,18 @@ export function getCreatures() {
                 ac: computedCreature.ac,
                 saves: computedCreature.saves,
                 hp: computedCreature.hp,
+                hpTraits: computedCreature.hpTraits,
                 skills: computedCreature.skills,
                 scores: computedCreature.stats,
                 languages: creatureType.languages,
                 items: [],
+                resistances: computedCreature.hpTraits.Resistances,
                 flags: [
                     ...character.flags || [],
                     ...creatureType.flags || [],
                     ...template.flags || [],
                 ],
-                current: character.current || {
-                    hp: creatureType.hp,
-                    conditions: [],
-                },
             };
         });
-    });
-}
-
-export function getAllCreatures() {
-    return getCreatures().then(creatures => {
-        return creatures.map(creature => ({
-            name: creature.name,
-            flags: creature.flags,
-            stats: {
-                level: creature.level,
-                ...(creature.scores),
-                ac: creature.ac,
-                hp: creature.hp,
-                ...(creature.saves),
-            },
-        }));
     });
 }

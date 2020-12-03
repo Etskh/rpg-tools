@@ -1,4 +1,61 @@
 
+const damageTypes = [{
+    name: "Piercing",
+    category: "Physical",
+}, {
+    name: "Bludgeoning",
+    category: "Physical",
+}, {
+    name: "Slashing",
+    category: "Physical",
+}, {
+    name: "Acid",
+    category: "Energy",
+}, {
+    name: "Cold",
+    category: "Energy",
+}, {
+    name: "Fire",
+    category: "Energy",
+}, {
+    name: "Electricity",
+    category: "Energy",
+}, {
+    name: "Sonic",
+    category: "Energy",
+}, {
+    name: "Force",
+    category: "Energy",
+}, {
+    name: "Chaotic",
+    category: "Alignment",
+}, {
+    name: "Good",
+    category: "Alignment",
+}, {
+    name: "Lawful",
+    category: "Alignment",
+}, {
+    name: "Evil",
+    category: "Alignment",
+}, {
+    name: "Mental",
+    category: "Mental",
+}, {
+    name: "Poison",
+    category: "Poison",
+}, {
+    name: "Bleed",
+    category: "Bleed",
+}, {
+    name: "Precision",
+    category: "Precision",
+}];
+
+export function getDamageTypes() {
+    return damageTypes;
+}
+
 const baseStats = [
     "str",
     "con",
@@ -157,6 +214,21 @@ export function getRuleset() {
                 return Math.floor((stats[stat] / 2) - 5);
             },
         })))
+        // // resistance_piercing
+        // .concat(damageTypes.map(type => ({
+        //     name: `resistance_${type.name.toLowerCase()}`,
+        //     defaultValue: 0,
+        // })))
+        // // immunity_piercing
+        // .concat(damageTypes.map(type => ({
+        //     name: `immunity_${type.name.toLowerCase()}`,
+        //     defaultValue: 0,
+        // })))
+        // // weakness_piercing
+        // .concat(damageTypes.map(type => ({
+        //     name: `weakness_${type.name.toLowerCase()}`,
+        //     defaultValue: 0,
+        // })))
         // fort_prof, ref_prof, will_prof
         .concat(saves.map(save => ({
             name: `${save.name}_prof`,
@@ -229,6 +301,8 @@ export function computeRuleset({
 }) {
     const ruleset = getRuleset();
 
+    console.log(ruleset);
+
     // TODO: Check flags against availableFlags
     let computedStats = {};
     try {
@@ -245,7 +319,7 @@ export function computeRuleset({
         baseStats: stats,
         // ruleset,
         config,
-        flags, 
+        flags,
         stats: computedStats,
     };
 }

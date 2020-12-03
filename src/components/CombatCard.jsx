@@ -10,11 +10,12 @@ import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
 import SetValueDialogButton from "./SetValueDialogButton.jsx";
+import { getDamageTypes } from "../lib/rulesets";
 
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         minWidth: 350,
+        flexGrow: true,
     },
     title: {
         fontSize: 14,
@@ -22,18 +23,40 @@ const useStyles = makeStyles((theme) => ({
     pos: {
         marginBottom: 12,
     },
-    modal: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    paper: {
-        backgroundColor: theme.palette.background.paper,
-        border: "none",
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
+    flag: {
+        textTransform: "capitalize",
     },
 }));
+
+
+
+function DamageModalButton({
+    stats,
+    onSetValue,
+}) {
+    // Check for all damage types
+    const [selectedTypes, setSelectedTypes] = React.useState({
+        // empty
+    });
+
+    const damageTypes = getDamageTypes();
+
+    return (
+        <SetValueDialogButton
+            label="Damage amount"
+            // extraInfo={"Immunities and resistances and vunerabilities go here"}
+            extraInfo={(
+                <>{damageTypes.map(type => (
+                    <Button key={type.name}>{type.name}</Button>
+                ))}</>
+            )}
+            onSetValue={onSetValue}
+        >
+            Damage
+        </SetValueDialogButton>
+    );
+}
+
 
 export default function CombatCard({
     character,
@@ -109,19 +132,28 @@ export default function CombatCard({
                         >
                             Heal
                         </SetValueDialogButton>
-                        <SetValueDialogButton
-                            label="Damage amount"
-                            extraInfo={"Immunities and resistances and vunerabilities go here"}
+                        <DamageModalButton
+                            extraInfo={(
+                                <Button>Fire</Button>
+                            )}
                             onSetValue={(damageAmount) => {
                                 onUpdateCurrentCharacter(character, {
                                     hp: character.current.hp - damageAmount,
                                 });
                             }}
-                        >
-                            Damage
-                        </SetValueDialogButton>
+                        />
                     </ButtonGroup>
                 </Typography>
+                <div>
+                    {character.flags.map(flag => (
+                        <Chip
+                            key={flag}
+                            label={flag}
+                            className={classes.flag}
+                            variant="default"
+                        />
+                    ))}
+                </div>
             </CardContent>
             <CardActions>
                 <SetValueDialogButton

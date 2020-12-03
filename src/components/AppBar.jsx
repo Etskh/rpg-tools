@@ -54,6 +54,7 @@ export default function ApplicationAppBar({
     characters,
     onAddCharacter,
     onRenameScenario,
+    onDeleteScenario,
 }) {
     const classes = useStyles();
     const [isCharacterModalOpen, setIsCharacterModalOpen] = React.useState(false);
@@ -136,6 +137,20 @@ export default function ApplicationAppBar({
                                     fullWidth
                                     onChange={(ev) => setScenarioName(ev.target.value)}
                                 />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    size="large"
+                                    fullWidth
+                                    onClick={() => {
+                                        onDeleteScenario();
+                                        setIsScenarioModalOpen(false);
+                                    }}
+                                >
+                                    Delete scenario
+                                </Button>
                             </Grid>
                             <Grid item xs={12}>
                                 <Button

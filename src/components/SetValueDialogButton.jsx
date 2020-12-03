@@ -74,15 +74,28 @@ export default function SetValueDialogButton({
 
 SetValueDialogButton.propTypes = {
     defaultValue: PropTypes.number,
-    extraInfo: PropTypes.string,
+    extraInfo: PropTypes.any,
     label: PropTypes.string,
     onSetValue: PropTypes.func.isRequired,
     children: PropTypes.any,
     // Button propTypes
-    variant: Button.propTypes.variant,
-    color: Button.propTypes.color,
-    size: Button.propTypes.size,
-    disabled: Button.propTypes.disabled,
+    variant: PropTypes.oneOf([
+        "contained",
+        "outlined",
+        "text",
+    ]),
+    color: PropTypes.oneOf([
+        "default",
+        "inherit",
+        "primary",
+        "secondary",
+    ]),
+    size: PropTypes.oneOf([
+        "large",
+        "medium",
+        "small",
+    ]),
+    disabled: PropTypes.bool,
     // SetValue propTypes
     allowRandom: SetValue.propTypes.allowRandom,
 };

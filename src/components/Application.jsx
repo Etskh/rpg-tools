@@ -9,6 +9,7 @@ import {
     loadScenario,
     updateCharacter,
     renameScenario,
+    deleteScenario,
 } from "../lib/scenario";
 import {
     getConditions,
@@ -82,6 +83,12 @@ export default function Application() {
         });
     }
 
+    function handleDeleteScenario() {
+        deleteScenario().then(updatedScenario => {
+            setScenario(updatedScenario);
+        })
+    }
+
     const selectedCharacter = scenario.characters.find(character => character.id === selectedCharacterId);
 
     return (
@@ -91,6 +98,7 @@ export default function Application() {
                 characters={characters}
                 onAddCharacter={handleAddCharacter}
                 onRenameScenario={handleRenameScenario}
+                onDeleteScenario={handleDeleteScenario}
             />
             <Grid
                 container

@@ -11,19 +11,8 @@ import MoodBadTwoToneIcon from "@material-ui/icons/MoodBadTwoTone";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: "100%",
-        maxWidth: 360,
-    },
-    modal: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    paper: {
-        backgroundColor: theme.palette.background.paper,
-        border: "none",
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
+        // width: "100%",
+        // maxWidth: 360,
     },
 }));
 

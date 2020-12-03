@@ -1,9 +1,10 @@
 import { getCreatures } from "./character";
-import { computeRuleset } from "./rulesets";
+import { computeRuleset, getDamageTypes } from "./rulesets";
 
 // This function transforms the stat block obtained from parsing the creature
 // and then computes it into ruleset-compatible format
 function getNPCCharacters() {
+    const damageTypes = getDamageTypes();
     return getCreatures().then(creatures => {
         return creatures.map(creature => ({
             name: creature.name,
@@ -29,6 +30,11 @@ function getNPCCharacters() {
                 will_prof: (creature.saves.will - creature.scores.wis - creature.level) / 2,
                 //
                 equipped_armour_value: creature.ac - 10 - creature.scores.dex - creature.level,
+                //
+                // ...(damageTypes.reduce((acc, type) => ({
+                //     ...acc,
+                //     [`resistance_${type.name.toLowerCase()}`]: creature.resistances[type.name.toLowerCase()] || 0,
+                // }), {})),
             },
             baseStats: {
                 ...creature,
@@ -80,6 +86,7 @@ function getPartyCharacters() {
         flags: [
             "male",
             "goblin",
+            "small",
             "fighter",
             "PC",
         ],
@@ -119,6 +126,7 @@ function getPartyCharacters() {
         },
         flags: [
             "female",
+            "small",
             "gnome",
             "witch",
             "PC",
@@ -159,6 +167,7 @@ function getPartyCharacters() {
         },
         flags: [
             "androgynous",
+            "medium",
             "elf",
             "cleric",
             "war priest",
@@ -201,6 +210,7 @@ function getPartyCharacters() {
         flags: [
             "male",
             "human",
+            "medium",
             "paladin",
             "PC",
         ],
@@ -239,10 +249,10 @@ function getPartyCharacters() {
             equipped_armour_type: "unarmoured",
         },
         flags: [
-            "androgynous",
+            "female",
+            "medium",
             "elf",
-            "cleric",
-            "war priest",
+            "wizard",
             "PC",
         ],
     }];
@@ -262,23 +272,25 @@ export function getAllCharacters() {
     });
 }
 
-
-export function loadScenario() {
-    const newScenario = {
+function getEmptyScenario() {
+    return {
         name: "Unsaved Scenario",
         characters: [],
     };
+}
 
+
+export function loadScenario() {
     const scenario = localStorage.getItem("scenario");
     if(!scenario) {
-        return Promise.resolve(newScenario);
+        return Promise.resolve(getEmptyScenario());
     }
     try {
         return Promise.resolve(JSON.parse(scenario));
     }
     catch(err) {
         console.warn(err);
-        return Promise.resolve(newScenario);
+        return Promise.resolve(getEmptyScenario());
     }
 }
 
@@ -337,4 +349,8 @@ export function renameScenario(scenario, newName) {
         ...scenario,
         name: newName,
     });
+}
+
+export function deleteScenario() {
+    return saveScenario(getEmptyScenario());
 }
