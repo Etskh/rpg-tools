@@ -10,7 +10,7 @@
 ## How to Test
 
 - `npm test` to run unit tests
-- `npm lint` to lint the codebase
+- `npm run lint` to lint the codebase
 
 ## Production
 
