@@ -86,7 +86,7 @@ export default function Application() {
     function handleDeleteScenario() {
         deleteScenario().then(updatedScenario => {
             setScenario(updatedScenario);
-        })
+        });
     }
 
     const selectedCharacter = scenario.characters.find(character => character.id === selectedCharacterId);

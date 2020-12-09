@@ -9,7 +9,7 @@ import Avatar from "@material-ui/core/Avatar";
 import EmojiEmotionsSharpIcon from "@material-ui/icons/EmojiEmotionsSharp";
 import MoodBadTwoToneIcon from "@material-ui/icons/MoodBadTwoTone";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         // width: "100%",
         // maxWidth: 360,
