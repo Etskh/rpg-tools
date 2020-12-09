@@ -14,7 +14,7 @@ import PropTypes from "prop-types";
 
 
 const models = [{
-    name: 'Ruleset',
+    name: "Ruleset",
     // This represents the ruleset and has all the math to do with the game in its
     // dataset
     data: {
@@ -25,15 +25,15 @@ const models = [{
             // How to get the value of the stat
             getValue: PropTypes.func,
         })),
-    }
+    },
 }, {
-    name: 'Creature Block',
+    name: "Creature Block",
     data: {
         name: PropTypes.string,
         blockText: PropTypes.string,
     },
 }, {
-    name: 'Choice List',
+    name: "Choice List",
     // These are the different types of characters you can create from, and they
     // represent an object that can be consumed by ruleset to create a character
     data: {
@@ -42,18 +42,18 @@ const models = [{
         stats: PropTypes.object,
     },
 }, {
-    name: 'Character',
+    name: "Character",
     data: {
         id: PropTypes.string,
         name: PropTypes.string,
         choicesId: PropTypes.string,
         stats: PropTypes.object,
-    }
+    },
 }, {
-    name: 'Scenario Character',
+    name: "Scenario Character",
     data: {
         name: PropTypes.string,
         characterId: PropTypes.string,
         current: PropTypes.object,
     },
-}]
+}];
