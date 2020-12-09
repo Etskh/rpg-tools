@@ -10,5 +10,9 @@
 ## How to Test
 
 - `npm test` to run unit tests
-- `npm lint` to lint the codebase
+- `npm run lint` to lint the codebase
+
+## Production
+
+Visit [this S3 bucket](https://rpg-tools-deploy.s3-us-west-1.amazonaws.com/index.html)
 
