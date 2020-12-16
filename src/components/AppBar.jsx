@@ -102,7 +102,7 @@ export default function ApplicationAppBar({
                     Combat
                 </Typography>
                 <Typography
-                    variant="h6"
+                    variant="h5"
                     className={classes.scenarioTitle}
                     color="inherit"
                     style={{

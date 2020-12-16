@@ -321,7 +321,7 @@ export function getCreatures() {
             };
             const computedCreature = template.translate(creatureType);
             
-            console.log(computedCreature);
+            // console.log(computedCreature);
 
             return {
                 name: character.name,

@@ -301,7 +301,7 @@ export function computeRuleset({
 }) {
     const ruleset = getRuleset();
 
-    console.log(ruleset);
+    // console.log(ruleset);
 
     // TODO: Check flags against availableFlags
     let computedStats = {};
